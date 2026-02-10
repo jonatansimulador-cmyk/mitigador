@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculador Diners - TC</title>
+    <style>
+        body { font-family: 'Calibri', sans-serif; margin: 0; padding: 0; background-color: #fff; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+        .viewport { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 60px; }
+        .tab-pane { display: none; }
+        .active { display: block; }
+
+        /* CALCULADOR */
+        .banner-main { background: #1f505a; color: white; text-align: center; padding: 8px; font-weight: bold; margin-bottom: 10px; border: 1px solid #000; }
+        .grid-flex { display: flex; gap: 30px; }
+        .col-calc { flex: 1; }
+        table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 15px; }
+        th, td { border: 1px solid #ccc; padding: 4px 8px; }
+        .h-repro { background: #1f505a; color: white; text-align: center; }
+        .total-repro { background: #1f505a; color: white; font-weight: bold; }
+        .h-refi { background: #7030a0; color: white; text-align: center; }
+        .total-refi { background: #7030a0; color: white; font-weight: bold; }
+        input { width: 100%; border: none; outline: none; text-align: right; background: transparent; font-family: inherit; }
+
+        /* CRONOGRAMA */
+        .header-blue-tab { background: #0070c0; color: white; padding: 10px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #000; }
+        .edit-box { display: flex; align-items: center; gap: 5px; background: #0070c0; padding: 2px 5px; border: 1px solid #fff; margin-bottom: 2px; }
+        .input-edit { width: 85px; color: white; font-weight: bold; text-align: center; border: none; background: transparent; }
+        
+        /* SPEECH (Imagen 3 - Diseño Final) */
+        .grid-speech-top { display: grid; grid-template-columns: 150px 300px 180px 300px; gap: 5px; margin-bottom: 20px; }
+        .lbl-blue { background: #1a3a5a; color: white; padding: 5px; font-size: 12px; }
+        .in-gray { background: #f2f2f2; border: 1px solid #ccc; padding: 5px; text-align: left !important; font-size: 12px; }
+        .banner-sec { background: #1a3a5a; color: white; text-align: center; padding: 5px; font-weight: bold; margin-top: 10px; font-size: 12px; }
+        .banner-repro { background: #4a8699; color: white; text-align: center; padding: 5px; font-weight: bold; margin-top: 10px; font-size: 12px; }
+        .lock-icon { font-size: 12px; color: #888; margin-left: 5px; }
+
+        /* NAV INFERIOR */
+        .nav-bar { position: fixed; bottom: 0; width: 100%; background: #f0f0f0; border-top: 1px solid #ccc; display: flex; padding: 5px; gap: 3px; }
+        .nav-item { padding: 5px 12px; border: 1px solid #ccc; background: #fff; cursor: pointer; font-size: 11px; border-radius: 3px; }
+        .nav-item.active { background: #fff2cc; border-bottom: 2px solid orange; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="viewport">
+    <div id="Calculador" class="tab-pane active">
+        <div class="banner-main">CALCULAR – MONTO A REPROGRAMAR | REFINANCIAR</div>
+        <div class="grid-flex">
+            <div class="col-calc">
+                <table>
+                    <tr class="h-repro"><th colspan="3">REPROGRAMACIÓN</th></tr>
+                    <tr><td>SALDO TC SOLES</td><td>S/ <input type="number" id="r_sol" value="15000" oninput="calcular()"></td><td id="res_r_sol">S/ 15,000.00</td></tr>
+                    <tr><td>SALDO TC DÓLARES</td><td>$ <input type="number" id="r_dol" value="150" oninput="calcular()"></td><td id="res_r_dol">S/ 526.50</td></tr>
+                    <tr><td>Saldo Cuota (PPD)</td><td>S/ <input type="number" id="r_c" value="11" oninput="calcular()"></td><td>S/ 11.00</td></tr>
+                    <tr><td>Saldo Capital (PPD)</td><td>S/ <input type="number" id="r_k" value="21" oninput="calcular()"></td><td>S/ 21.00</td></tr>
+                    <tr><td>Interés (PPD)</td><td>S/ <input type="number" id="r_i" value="12" oninput="calcular()"></td><td>S/ 12.00</td></tr>
+                    <tr class="total-repro"><td>SALDO REPRO CONSOLIDADO</td><td colspan="2" id="t_repro" style="text-align:right">S/ 15,570.50</td></tr>
+                </table>
+            </div>
+            <div class="col-calc">
+                <table>
+                    <tr class="h-refi"><th colspan="3">REFINANCIAMIENTO</th></tr>
+                    <tr><td>SALDO TC SOLES</td><td>S/ <input type="number" id="f_sol" value="15" oninput="calcular()"></td><td id="res_f_sol">S/ 15.00</td></tr>
+                    <tr><td>SALDO TC DÓLARES</td><td>$ <input type="number" id="f_dol" value="15" oninput="calcular()"></td><td id="res_f_dol">S/ 52.65</td></tr>
+                    <tr class="total-refi"><td>SALDO REFI CONSOLIDADO</td><td colspan="2" id="t_refi" style="text-align:right">S/ 97.65</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="Calculo_TC" class="tab-pane">
+        <div class="header-blue-tab">
+            <div style="display:flex; flex-direction:column;">
+                <div class="edit-box">TEA: <input type="text" id="tea_edit" class="input-edit" value="33.99%" oninput="recalcularCronograma()"></div>
+                <div class="edit-box">Plazo: <input type="number" id="plazo_edit" class="input-edit" value="48" oninput="recalcularCronograma()"></div>
+            </div>
+            <div style="text-align:center;">
+                <div style="font-size:13px; font-weight:bold;">Saldo a la fecha (S/)</div>
+                <div id="saldo_box" style="background:#fff; color:#0070c0; padding:8px 15px; font-size:18px; font-weight:bold; margin-top:3px;">15,571</div>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:flex-end;">
+                <div class="edit-box">Fecha Solicitud: <input type="date" id="fec_edit" class="input-edit" value="2025-05-24" oninput="recalcularCronograma()"></div>
+                <div class="edit-box">Ciclo: 
+                    <select id="ciclo_edit" class="input-edit" style="background:#0070c0; border:none; color:white;" onchange="recalcularCronograma()">
+                        <option value="1">Ciclo 1</option>
+                        <option value="5">Ciclo 5</option>
+                        <option value="18" selected>Ciclo 18</option>
+                        <option value="25">Ciclo 25</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <table style="width:100%; margin-top:10px;">
+            <tr style="background:#0070c0; color:white;">
+                <th>Mes</th><th>EECC</th><th>Vencim.</th><th>Saldo inicial</th><th>Amortización</th><th>Interés</th><th>Cuota</th>
+            </tr>
+            <tbody id="cron_body_dynamic"></tbody>
+        </table>
+    </div>
+
+    <div id="Speech_TC" class="tab-pane">
+        <div style="display:flex; justify-content:flex-end; gap:10px; margin-bottom:10px;">
+            <button onclick="generar()" style="padding: 5px 20px; cursor: pointer;">APLICAR</button>
+            <button onclick="location.reload()" style="padding: 5px 20px; cursor: pointer;">LIMPIAR</button>
+        </div>
+        
+        <div class="grid-speech-top">
+            <div class="lbl-blue">Nombre Socio: *</div><input type="text" id="in_nom" class="in-gray">
+            <div style="grid-column: 3;" class="lbl-blue">DNI Socio: *</div><input type="text" id="in_dni" class="in-gray" style="grid-column: 4;">
+            <div class="lbl-blue">Nombre Ejecutivo: *</div><input type="text" id="in_eje" class="in-gray">
+            <div style="grid-column: 3;" class="lbl-blue">Fecha Nac: *</div><input type="text" id="in_fec" class="in-gray" style="grid-column: 4;">
+        </div>
+
+        <div style="display:flex; gap:20px;">
+            <div style="flex:1;">
+                <div class="banner-sec">INFORMACIÓN TARJETA DINERS</div>
+                <table style="margin-top:5px;">
+                    <tr><td class="lbl-blue">Pago Mes (S/):</td><td><input type="text" class="in-gray"></td><td class="lbl-blue">Pago Inicial TC (S/):</td><td><input type="text" class="in-gray"></td></tr>
+                    <tr><td class="lbl-blue">Pago Mes ($):</td><td><input type="text" class="in-gray"></td><td class="lbl-blue">Pago Inicial TC ($):</td><td><input type="text" class="in-gray"></td></tr>
+                    <tr><td class="lbl-blue" style="background:#c00000;">Pago Mínimo (S/):</td><td><input type="text" class="in-gray"></td><td class="lbl-blue" style="background:#7030a0;">Deuda Total (S/):</td><td><input type="text" class="in-gray"></td></tr>
+                    <tr><td class="lbl-blue" style="background:#c00000;">Pago Mínimo ($):</td><td><input type="text" class="in-gray"></td><td class="lbl-blue" style="background:#7030a0;">Deuda Total ($):</td><td><input type="text" class="in-gray"></td></tr>
+                    <tr><td class="lbl-blue">Venc. EECC: *</td><td><input type="text" class="in-gray"></td></tr>
+                    <tr><td class="lbl-blue">Días Mora: *</td><td><input type="text" class="in-gray"></td></tr>
+                </table>
+            </div>
+
+            <div style="flex:1;">
+                <div class="banner-repro">INFORMACIÓN REPROGRAMACIÓN</div>
+                <table style="margin-top:5px;">
+                    <tr><td class="banner-repro">Monto a Financiar</td><td class="in-gray"><span id="sp_monto_text">S/ 15,570.50</span> <span class="lock-icon">🔒</span></td><td class="banner-repro">Num Cuotas</td><td class="in-gray"><span id="sp_cuotas_text">48</span> <span class="lock-icon">🔒</span></td></tr>
+                    <tr><td class="banner-repro">TEA</td><td class="in-gray"><span id="sp_tea_text">33.99%</span> <span class="lock-icon">🔒</span></td><td class="banner-repro">Cuota PPD</td><td class="in-gray"><span id="sp_cuota_val">S/ 567.41</span> <span class="lock-icon">🔒</span></td></tr>
+                    <tr><td class="banner-repro">TCEA</td><td class="in-gray">35.47% <span class="lock-icon">🔒</span></td></tr>
+                    <tr><td style="height: 10px;"></td></tr>
+                    <tr><td class="banner-repro">1er Fecha Factu.</td><td class="in-gray">18/06/2025 <span class="lock-icon">🔒</span></td><td style="background:#ffc000; color:black; font-weight:bold; padding:5px;">Tipo de Campaña: *</td></tr>
+                    <tr><td class="banner-repro">1er Fecha Venc.</td><td class="in-gray">6/07/2025 <span class="lock-icon">🔒</span></td><td><select id="sp_camp" class="in-gray" style="width:100%; border: 1px solid orange;"><option value="Socios para Siempre">Socios para Siempre</option><option value="Cambio de Plan">Cambio de Plan</option></select></td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="nav-bar">
+    <div class="nav-item" onclick="location.href='mascara.html'">Menu</div>
+    <div id="b1" class="nav-item active" onclick="showTab('Calculador', 'b1')">Calculador</div>
+    <div id="b2" class="nav-item" style="background:#fce4d6" onclick="showTab('Calculo_TC', 'b2')">Calculo_TC</div>
+    <div id="b3" class="nav-item" style="background:#c00000; color:white;" onclick="showTab('Speech_TC', 'b3')">Speech_TC</div>
+    <div id="b4" class="nav-item" style="background:#ffc000">Detallador</div>
+</div>
+
+<script>
+    function showTab(id, btn) {
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.getElementById(btn).classList.add('active');
+        if(id === 'Calculo_TC') recalcularCronograma();
+        if(id === 'Speech_TC') syncSpeechInfo();
+    }
+
+    function calcular() {
+        let tc = 3.51;
+        let r_sol = parseFloat(document.getElementById('r_sol').value) || 0;
+        let r_dol_s = (parseFloat(document.getElementById('r_dol').value) || 0) * tc;
+        let ppd = (parseFloat(document.getElementById('r_c').value)||0) + (parseFloat(document.getElementById('r_k').value)||0) + (parseFloat(document.getElementById('r_i').value)||0);
+        let total = r_sol + r_dol_s + ppd;
+
+        document.getElementById('res_r_sol').innerText = "S/ " + r_sol.toFixed(2);
+        document.getElementById('res_r_dol').innerText = "S/ " + r_dol_s.toFixed(2);
+        document.getElementById('t_repro').innerText = "S/ " + total.toLocaleString('en-US',{minimumFractionDigits:2});
+        
+        document.getElementById('saldo_box').innerText = Math.round(total).toLocaleString();
+        syncSpeechInfo();
+    }
+
+    function syncSpeechInfo() {
+        const monto = document.getElementById('t_repro').innerText;
+        const tea = document.getElementById('tea_edit').value;
+        const cuotas = document.getElementById('plazo_edit').value;
+        
+        document.getElementById('sp_monto_text').innerText = monto;
+        document.getElementById('sp_tea_text').innerText = tea;
+        document.getElementById('sp_cuotas_text').innerText = cuotas;
+    }
+
+    function recalcularCronograma() {
+        const rawMonto = document.getElementById('t_repro').innerText.replace('S/ ', '').replace(/,/g, '');
+        const saldoTotal = parseFloat(rawMonto) || 0;
+        const teaStr = document.getElementById('tea_edit').value.replace('%','');
+        const tea = parseFloat(teaStr) / 100;
+        const plazo = parseInt(document.getElementById('plazo_edit').value) || 1;
+        const tem = Math.pow(1 + tea, 1/12) - 1;
+        
+        const cuota = (saldoTotal * tem) / (1 - Math.pow(1 + tem, -plazo));
+        document.getElementById('sp_cuota_val').innerText = "S/ " + cuota.toLocaleString('en-US',{minimumFractionDigits:2});
+        
+        const ciclo = parseInt(document.getElementById('ciclo_edit').value);
+        let fechaBase = new Date(document.getElementById('fec_edit').value);
+
+        let html = "";
+        let saldoInicial = saldoTotal;
+
+        for (let i = 1; i <= plazo; i++) {
+            let interes = saldoInicial * tem;
+            let amortizacion = cuota - interes;
+            let eeccDate = new Date(fechaBase);
+            eeccDate.setMonth(eeccDate.getMonth() + i);
+            eeccDate.setDate(ciclo);
+            let vencDate = new Date(eeccDate);
+            vencDate.setDate(vencDate.getDate() + 15);
+
+            html += `<tr>
+                <td>${i}</td>
+                <td>${eeccDate.toLocaleDateString('es-PE')}</td>
+                <td>${vencDate.toLocaleDateString('es-PE')}</td>
+                <td>S/ ${saldoInicial.toLocaleString('en-US',{minimumFractionDigits:2})}</td>
+                <td>S/ ${amortizacion.toLocaleString('en-US',{minimumFractionDigits:2})}</td>
+                <td>S/ ${interes.toLocaleString('en-US',{minimumFractionDigits:2})}</td>
+                <td>S/ ${cuota.toLocaleString('en-US',{minimumFractionDigits:2})}</td>
+            </tr>`;
+            saldoInicial -= amortizacion;
+        }
+        document.getElementById('cron_body_dynamic').innerHTML = html;
+    }
+
+    function generar() { alert("Información sincronizada correctamente."); }
+    calcular();
+</script>
+</body>
+</html>

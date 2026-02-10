@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simuladores de Gestión - Cobranzas</title>
+    <style>
+        :root {
+            --primary-bg: #1f505a; /* Color del encabezado */
+            --card-bg: #f5f5f5;    /* Gris claro de los paneles */
+            --btn-gray: #b0b0b0;   /* Botón gris */
+            --btn-red: #c00000;    /* Botón rojo */
+            --text-color: #2c515a; /* Color de fuente */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Contenedor del Título */
+        .header {
+            background-color: var(--primary-bg);
+            width: 90%;
+            max-width: 900px;
+            padding: 15px 0;
+            text-align: center;
+            color: white;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Contenedor de las opciones */
+        .container {
+            width: 90%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Filas de simuladores */
+        .simulator-card {
+            background-color: var(--card-bg);
+            padding: 25px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 2px;
+        }
+
+        .simulator-title {
+            color: var(--text-color);
+            font-weight: bold;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            flex: 1;
+        }
+
+        /* Botones */
+        .btn-simulator {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            min-width: 150px;
+        }
+
+        .btn-simulator:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .bg-gray { background-color: var(--btn-gray); }
+        .bg-red { background-color: var(--btn-red); }
+
+        .bg-gray:hover { background-color: #9e9e9e; }
+        .bg-red:hover { background-color: #a00000; }
+
+        /* Estilo para las pestañas de abajo (Visual) */
+        .footer-tabs {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            background: #eee;
+            padding: 5px;
+            border-top: 1px solid #ccc;
+        }
+        .tab {
+            padding: 5px 15px;
+            margin-right: 5px;
+            border-radius: 4px;
+            font-size: 12px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        SIMULADORES DE GESTIÓN – COBRANZAS
+    </div>
+
+    <div class="container">
+        <div class="simulator-card">
+            <div class="simulator-title">REPROGRAMACIÓN A PRÉSTAMO PERSONAL INDEPENDIENTE</div>
+            <a href="REPRO-PPD.html" class="btn-simulator bg-gray">IR A SIMULADOR</a>
+        </div>
+
+        <div class="simulator-card">
+            <div class="simulator-title">REPROGRAMACIÓN (SOLO TC)</div>
+            <a href="TC.html" class="btn-simulator bg-red">IR A SIMULADOR</a>
+        </div>
+
+        <div class="simulator-card">
+            <div class="simulator-title">REFINANCIAMIENTO A PRÉSTAMO DE LIBRE DISPOSICIÓN</div>
+            <a href="REFINAN.html" class="btn-simulator bg-gray">IR A SIMULADOR</a>
+        </div>
+    </div>
+
+</body>
+</html>
